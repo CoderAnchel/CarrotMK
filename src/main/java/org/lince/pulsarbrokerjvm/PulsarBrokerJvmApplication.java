@@ -9,5 +9,4 @@ public class PulsarBrokerJvmApplication {
     public static void main(String[] args) {
         SpringApplication.run(PulsarBrokerJvmApplication.class, args);
     }
-
 }

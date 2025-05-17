@@ -43,6 +43,14 @@ public class Queue {
         System.out.println("Consumer added!");
     }
 
+    public int getMessagesNumber() {
+        return messages.size();
+    }
+
+    public int numberOfConnections() {
+        return listeners.size();
+    }
+
     public String getQueueName() {
         return QueueName;
     }

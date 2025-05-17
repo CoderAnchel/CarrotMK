@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class MessagingService {
 
-    public static void filterMessage(WebSocketSession session, TextMessage message) throws IOException {
+    public static void filterMessage(WebSocketSession session, TextMessage message) throws
+            IOException, InstantiationException, IllegalAccessException {
         String payload = message.getPayload();
         System.out.println("payload: "+payload);
 
@@ -37,7 +38,8 @@ public class MessagingService {
      */
 
     //optimizar
-    public static void route(Message mess) throws IOException {
+    public static void route(Message mess) throws IOException, InstantiationException,
+            IllegalAccessException {
         switch (mess.getContentType()) {
             case "TEXT/JSON":
                 PulsarBroker.newMessage(mess);
@@ -57,6 +59,10 @@ public class MessagingService {
                 System.out.println("Repo config readed: "+repositoryConfig);
                 PulsarBroker.addRepository(new Repository(repositoryConfig.getName(), repositoryConfig));
                 break;
+            case "QUEUE_INFORMATION":
+
+                break;
         }
     }
 }
+
