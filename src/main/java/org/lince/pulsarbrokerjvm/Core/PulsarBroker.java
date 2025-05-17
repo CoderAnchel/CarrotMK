@@ -6,7 +6,10 @@ import org.lince.pulsarbrokerjvm.Core.Entities.Consumer;
 import org.lince.pulsarbrokerjvm.Core.Entities.Message;
 import org.lince.pulsarbrokerjvm.Core.Entities.Queue;
 import org.lince.pulsarbrokerjvm.Core.Entities.Repository;
+import org.lince.pulsarbrokerjvm.Exceptions.ConsumerNotFoundException;
+import org.lince.pulsarbrokerjvm.Exceptions.WrongRouteException;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class PulsarBroker {
@@ -14,10 +17,28 @@ public class PulsarBroker {
     private static HashMap<String, Repository> repositories = new HashMap<>();
     private static Integer lastMessageId = 0;
 
-
     public static void addConsumer(Consumer consumer) {
-        System.out.printf("%s added to consumers ✅ \n",consumer.getConsumerId());
-        consumers.put(consumer.getConsumerId(), consumer);
+        Consumer csm = consumers.put(consumer.getConsumerId(), consumer);
+        if (csm == null) {
+            System.out.printf("%s added to consumers ✅ \n",consumer.getConsumerId());
+        } else {
+            System.out.println("Consumer object updated");
+        }
+    }
+
+    public static void newMessage(Message mess) throws IOException {
+        if (validateRouting(mess)) repositories.get(mess.getRepo()).getTopics().get(mess.getQueue()).newMessage(mess); else System.out.println("Error adding message");
+    }
+
+    public static void addListener(String consumerId, Message mess) throws WrongRouteException, ConsumerNotFoundException {
+        if (consumers.containsKey(consumerId)) {
+            System.out.println("Consumer fined: "+consumers.get(consumerId));
+
+            if (validateRouting(mess)) repositories.get(mess.getRepo()).getTopics().get(mess.getQueue()).addListener(consumers.get(consumerId)); else
+                System.out.println("ROUTE NOT FOUND!");
+        } else {
+            throw new ConsumerNotFoundException("Consumer not found");
+        }
     }
 
     public static int increment() {

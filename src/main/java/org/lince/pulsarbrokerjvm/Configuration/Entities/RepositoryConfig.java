@@ -8,7 +8,6 @@ public class RepositoryConfig {
     private String name;
     private String description;
 
-
     public RepositoryConfig(String payload) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();

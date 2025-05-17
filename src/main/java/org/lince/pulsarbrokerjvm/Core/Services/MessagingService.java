@@ -20,18 +20,31 @@ public class MessagingService {
         Message mess = new Message(payload, session);
         System.out.println("Message received: " + mess);
         route(mess);
-
-        // Echo the message back
-        session.sendMessage(new TextMessage("Echo: " + payload));
     }
 
-    public static void route(Message mess) {
+    /*
+{
+            "producer_id":"id1",
+        "content_type":"TEXT/JSON",
+        "payload":{
+                "name":"Coladegato",
+                "description":"cola de gato"
+        },
+        "timestamp":"x",
+        "repo":"REPOSITORY1",
+        "topic":"Coladegato"
+        }
+     */
+
+    //optimizar
+    public static void route(Message mess) throws IOException {
         switch (mess.getContentType()) {
             case "TEXT/JSON":
-                System.out.println("Routable: "+ PulsarBroker.validateRouting(mess));
+                PulsarBroker.newMessage(mess);
+                //System.out.println("Routable: "+ PulsarBroker.validateRouting(mess));
                 break;
             case "QUEUE_REGISTRATION":
-                System.out.println("Routable: "+ PulsarBroker.validateRouting(mess));
+                PulsarBroker.addListener(mess.getProducerId(), mess);
                 break;
             case "QUEUE_CREATION":
                 QueueConfig queueConfig = new QueueConfig(mess.getPayload());

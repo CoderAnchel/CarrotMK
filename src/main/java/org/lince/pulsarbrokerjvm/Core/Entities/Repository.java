@@ -18,6 +18,10 @@ public class Repository {
         this.repositoryConfig = repositoryConfig;
     }
 
+    public void addListener(Consumer consumer) {
+        this.listeners.put(consumer.getConsumerId(), consumer);
+    }
+
     public String getRepoName() {
         return RepoName;
     }
