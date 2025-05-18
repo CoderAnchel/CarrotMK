@@ -10,6 +10,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class MessagingService {
 
@@ -50,6 +51,7 @@ public class MessagingService {
                 break;
             case "QUEUE_CREATION":
                 QueueConfig queueConfig = new QueueConfig(mess.getPayload());
+                queueConfig.setCreationTimestamp(new Date());
                 Queue queue = new Queue(queueConfig.getName(), queueConfig);
                 PulsarBroker.addQueue(mess,  queue);
                 System.out.println("Queue config readed: "+queueConfig);

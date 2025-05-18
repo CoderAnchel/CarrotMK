@@ -1,5 +1,6 @@
 package org.lince.pulsarbrokerjvm.Core.Entities;
 
+import org.lince.pulsarbrokerjvm.Configuration.Entities.ConsumerConfig;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ public class Consumer {
     private String consumerId;
     private WebSocketSession session;
     private ArrayList<String> connections;
+    private ConsumerConfig consumerConfig;
 
     public Consumer( String consumerId, WebSocketSession session) {
         this.consumerId = consumerId;
