@@ -1,13 +1,12 @@
 package org.lince.pulsarbrokerjvm.Core;
 
-import ch.qos.logback.core.net.QueueFactory;
-import org.lince.pulsarbrokerjvm.Configuration.Entities.QueueConfig;
 import org.lince.pulsarbrokerjvm.Core.Entities.Consumer;
 import org.lince.pulsarbrokerjvm.Core.Entities.Message;
 import org.lince.pulsarbrokerjvm.Core.Entities.Queue;
 import org.lince.pulsarbrokerjvm.Core.Entities.Repository;
 import org.lince.pulsarbrokerjvm.Exceptions.ConsumerNotFoundException;
 import org.lince.pulsarbrokerjvm.Exceptions.WrongRouteException;
+import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -39,6 +38,37 @@ public class PulsarBroker {
         } else {
             throw new ConsumerNotFoundException("Consumer not found");
         }
+    }
+
+    public static void unfollowQueue(Message mess) {
+        if (validateRouting(mess)) {
+            Queue queue = getQueue(mess);
+            queue.unfollow(mess.getProducerId());
+        }
+    }
+
+    public static void getRepositoryInfo(Message mess) throws IOException  {
+        if (repositories.containsKey(mess.getRepo())) {
+            Repository repository = repositories.get(mess.getRepo());
+            Consumer consumer = repository.getListeners().get(mess.getProducerId());
+            if (consumer != null) {
+                consumer.getSession().sendMessage(new TextMessage(repository.toString()));
+            }
+        }
+    }
+
+    public static void getQueueInfo(Message mess) throws IOException {
+        if (validateRouting(mess)) {
+            Queue queue = getQueue(mess);
+            Consumer consumer = queue.getListeners().get(mess.getProducerId());
+            if (consumer != null) {
+                consumer.getSession().sendMessage(new TextMessage(queue.toString()));
+            }
+        }
+    }
+
+    public static Queue getQueue(Message mess) {
+        return repositories.get(mess.getRepo()).getTopics().get(mess.getQueue());
     }
 
     public static int increment() {

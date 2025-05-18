@@ -5,7 +5,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
 
-public class Consumer {
+public class Consumer implements Cloneable {
     private String consumerId;
     private WebSocketSession session;
     private ArrayList<String> connections;
@@ -40,5 +40,16 @@ public class Consumer {
                 ", session=" + session +
                 ", connections=" + connections +
                 '}';
+    }
+
+    @Override
+    public Consumer clone() {
+        try {
+            Consumer cloned = (Consumer) super.clone();
+            cloned.connections = new ArrayList<>(this.connections); // Copia profunda de la lista
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
     }
 }

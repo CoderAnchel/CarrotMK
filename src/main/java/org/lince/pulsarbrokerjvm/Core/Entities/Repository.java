@@ -19,7 +19,7 @@ public class Repository {
     }
 
     public void addListener(Consumer consumer) {
-        this.listeners.put(consumer.getConsumerId(), consumer);
+        this.listeners.put(consumer.getConsumerId(), consumer.clone());
     }
 
     public String getRepoName() {
@@ -54,5 +54,16 @@ public class Repository {
     public void setRepositoryConfig(
             RepositoryConfig repositoryConfig) {
         this.repositoryConfig = repositoryConfig;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Repository{" +
+                "RepoName='" + RepoName + '\'' +
+                ", topics=" + topics.toString() +
+                ", listeners=" + listeners.toString() +
+                ", repositoryConfig=" + repositoryConfig.toString() +
+                '}';
     }
 }

@@ -14,8 +14,7 @@ import java.util.Date;
 
 public class MessagingService {
 
-    public static void filterMessage(WebSocketSession session, TextMessage message) throws
-            IOException, InstantiationException, IllegalAccessException {
+    public static void filterMessage(WebSocketSession session, TextMessage message) throws IOException, InstantiationException, IllegalAccessException {
         String payload = message.getPayload();
         System.out.println("payload: "+payload);
 
@@ -46,6 +45,9 @@ public class MessagingService {
                 PulsarBroker.newMessage(mess);
                 //System.out.println("Routable: "+ PulsarBroker.validateRouting(mess));
                 break;
+            case "QUEUE_UNFOLLOW":
+                PulsarBroker.unfollowQueue(mess);
+                break;
             case "QUEUE_REGISTRATION":
                 PulsarBroker.addListener(mess.getProducerId(), mess);
                 break;
@@ -62,7 +64,10 @@ public class MessagingService {
                 PulsarBroker.addRepository(new Repository(repositoryConfig.getName(), repositoryConfig));
                 break;
             case "QUEUE_INFORMATION":
-
+                PulsarBroker.getQueueInfo(mess);
+                break;
+            case "REPO_INFORMATION":
+                PulsarBroker.getRepositoryInfo(mess);
                 break;
         }
     }

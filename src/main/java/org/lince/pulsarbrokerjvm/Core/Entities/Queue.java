@@ -39,8 +39,12 @@ public class Queue {
     }
 
     public void addListener(Consumer consumer) {
-        this.listeners.put(consumer.getConsumerId(), consumer);
+        this.listeners.put(consumer.getConsumerId(), consumer.clone());
         System.out.println("Consumer added!");
+    }
+
+    public void unfollow(String consumer) {
+        this.listeners.remove(consumer);
     }
 
     public int getMessagesNumber() {
@@ -82,5 +86,15 @@ public class Queue {
     public void setListeners(
             HashMap<String, Consumer> listeners) {
         this.listeners = listeners;
+    }
+
+    @Override
+    public String toString() {
+        return "Queue{" +
+                "QueueName='" + QueueName + '\'' +
+                ", messages=" + messages.toString() +
+                ", config=" + config.toString() +
+                ", listeners=" + listeners.toString() +
+                '}';
     }
 }

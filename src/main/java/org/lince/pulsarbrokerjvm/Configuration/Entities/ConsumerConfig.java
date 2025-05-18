@@ -79,6 +79,17 @@ public class ConsumerConfig {
         }
     }
 
+    public ConsumerConfig deepClone() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(this);
+            return objectMapper.readValue(json, ConsumerConfig.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error while cloning ConsumerConfig", e);
+        }
+    }
+
     public Map<String, Integer> getNotificationThresholds() {
         return notificationThresholds;
     }
