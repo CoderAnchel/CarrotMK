@@ -7,7 +7,7 @@ CarrotBK it's a side project trying to learn more about message and stream broke
 ![ehbdjkdahbhjbada.svg](Docs/ehbdjkdahbhjbada.svg)
 
 ### SDKS
-* [Java](https://rabbitmq.com)
+* [Java](https://github.com/CoderAnchel/CarrotSDK)
 * [Go](https://rabbitmq.com)
 * [Typescript](https://rabbitmq.com)
 
