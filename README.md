@@ -4,7 +4,7 @@
 
 CarrotBK it's a side project trying to learn more about message and stream brokers, it gives you the ability to create listen and configure queues:
 
-![esquemamessag.png](Docs/esquemamessag.png)
+![ehbdjkdahbhjbada.svg](Docs/ehbdjkdahbhjbada.svg)
 
 ### SDKS
 * [Java](https://rabbitmq.com)
