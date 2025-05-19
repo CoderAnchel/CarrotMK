@@ -48,6 +48,9 @@ public class MessagingService {
             case "QUEUE_UNFOLLOW":
                 PulsarBroker.unfollowQueue(mess);
                 break;
+            case "REPO_REGISTRATION":
+                PulsarBroker.addRepoListener(mess);
+                break;
             case "QUEUE_REGISTRATION":
                 PulsarBroker.addListener(mess.getProducerId(), mess);
                 break;
@@ -67,6 +70,9 @@ public class MessagingService {
                 PulsarBroker.getQueueInfo(mess);
                 break;
             case "REPO_INFORMATION":
+                PulsarBroker.getRepositoryInfo(mess);
+                break;
+            case "CONSUMER_INFORMATION":
                 PulsarBroker.getRepositoryInfo(mess);
                 break;
         }

@@ -33,12 +33,22 @@ public class Consumer implements Cloneable {
         this.consumerId = consumerId;
     }
 
+    public ConsumerConfig getConsumerConfig() {
+        return consumerConfig;
+    }
+
+    public void setConsumerConfig(
+            ConsumerConfig consumerConfig) {
+        this.consumerConfig = consumerConfig;
+    }
+
     @Override
     public String toString() {
         return "Consumer{" +
                 "consumerId='" + consumerId + '\'' +
                 ", session=" + session +
                 ", connections=" + connections +
+                ", config=" + connections +
                 '}';
     }
 

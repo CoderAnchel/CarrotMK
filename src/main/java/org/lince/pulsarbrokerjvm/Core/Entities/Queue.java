@@ -7,22 +7,27 @@ import org.springframework.web.socket.TextMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Queue {
     private String QueueName;
     private ArrayList<Message> messages;
     private QueueConfig config;
-    private HashMap<String, Consumer> listeners;
+    private ConcurrentHashMap<String, Consumer> listeners;
+    private long actualSize;
 
     public Queue(String QueueName, QueueConfig config) {
         this.QueueName = QueueName;
         this.messages = new ArrayList<>();
-        this.listeners = new HashMap<>();
+        this.listeners = new ConcurrentHashMap<>();
         this.config = config;
     }
 
+
+    //maybe there will be changes here!
     public void newMessage(Message message) throws IOException {
         messages.add(message);
+        actualSize = actualSize + message.getSize();
 
         broadcast(message);
         System.out.println("Message added!");
@@ -79,12 +84,12 @@ public class Queue {
         this.config = config;
     }
 
-    public HashMap<String, Consumer> getListeners() {
+    public ConcurrentHashMap<String, Consumer> getListeners() {
         return listeners;
     }
 
     public void setListeners(
-            HashMap<String, Consumer> listeners) {
+            ConcurrentHashMap<String, Consumer> listeners) {
         this.listeners = listeners;
     }
 

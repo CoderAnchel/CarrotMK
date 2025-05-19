@@ -10,10 +10,11 @@ import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PulsarBroker {
-    private static HashMap<String, Consumer> consumers = new HashMap<>();
-    private static HashMap<String, Repository> repositories = new HashMap<>();
+    private static ConcurrentHashMap<String, Consumer> consumers = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Repository> repositories = new ConcurrentHashMap<>();
     private static Integer lastMessageId = 0;
 
     public static void addConsumer(Consumer consumer) {
@@ -25,8 +26,20 @@ public class PulsarBroker {
         }
     }
 
+    //refactoring
     public static void newMessage(Message mess) throws IOException {
-        if (validateRouting(mess)) repositories.get(mess.getRepo()).getTopics().get(mess.getQueue()).newMessage(mess); else System.out.println("Error adding message");
+        if (validateRouting(mess)) {
+            Repository repository = repositories.get(mess.getRepo());
+            repository.setActualSize(repository.getActualSize() + mess.getSize());
+            repository.getTopics().get(mess.getQueue()).newMessage(mess);
+        } else System.out.println("Error adding message");
+    }
+
+    public static void addRepoListener(Message mess) {
+        if (consumers.containsKey(mess.getProducerId()) && repositories.containsKey(mess.getRepo())) {
+            Consumer consumer = consumers.get(mess.getProducerId()).clone();
+            repositories.get(mess.getRepo()).addListener(consumer);
+        }
     }
 
     public static void addListener(String consumerId, Message mess) throws WrongRouteException, ConsumerNotFoundException {
@@ -39,7 +52,7 @@ public class PulsarBroker {
             throw new ConsumerNotFoundException("Consumer not found");
         }
     }
-
+    
     public static void unfollowQueue(Message mess) {
         if (validateRouting(mess)) {
             Queue queue = getQueue(mess);
@@ -103,7 +116,7 @@ public class PulsarBroker {
             if(!repositories.containsKey(message.getRepo())) {
                 System.out.println("Repo doesn't exist");
             } else {
-                repositories.get(message.getRepo()).getTopics().put(queue.getQueueName(), queue);
+                repositories.get(message.getRepo()).addQueue(queue);
                 System.out.println("Queue added");
             }
         }

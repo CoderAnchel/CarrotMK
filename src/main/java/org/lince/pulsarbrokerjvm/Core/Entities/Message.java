@@ -7,6 +7,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class Message {
@@ -17,6 +18,7 @@ public class Message {
     private String contentType;
     private String payload;
     private Date timestampt;
+    private Long size;
 
     public Message(String payload, WebSocketSession session) throws IOException {
         try {
@@ -37,6 +39,7 @@ public class Message {
                 this.payload = payloadNode.isObject() ? payloadNode.toString() : payloadNode.asText();
 
                 this.timestampt = new Date();
+                this.size = (long) payload.getBytes(StandardCharsets.UTF_8).length;
             }
 
         } catch (Exception e) {
@@ -110,6 +113,15 @@ public class Message {
         this.timestampt = timestampt;
     }
 
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+
     @Override
     public String toString() {
         return "Message{" +
@@ -120,6 +132,7 @@ public class Message {
                 ", contentType='" + contentType + '\'' +
                 ", payload='" + payload + '\'' +
                 ", timestampt=" + timestampt +
+                ", size=" + size +
                 '}';
     }
 }

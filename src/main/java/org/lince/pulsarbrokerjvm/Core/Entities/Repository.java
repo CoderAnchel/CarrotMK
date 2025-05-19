@@ -3,17 +3,18 @@ package org.lince.pulsarbrokerjvm.Core.Entities;
 import org.lince.pulsarbrokerjvm.Configuration.Entities.RepositoryConfig;
 
 import java.util.HashMap;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Repository {
     private String RepoName;
-    private HashMap<String, org.lince.pulsarbrokerjvm.Core.Entities.Queue> topics;
+    private ConcurrentHashMap<String, Queue> topics;
     private HashMap<String, Consumer> listeners;
     private RepositoryConfig repositoryConfig;
+    private long actualSize;
 
     public Repository( String RepoName, RepositoryConfig repositoryConfig) {
         this.RepoName = RepoName;
-        this.topics = new HashMap<>();
+        this.topics = new ConcurrentHashMap<>();
         this.listeners = new HashMap<>();
         this.repositoryConfig = repositoryConfig;
     }
@@ -30,11 +31,11 @@ public class Repository {
         RepoName = repoName;
     }
 
-    public  HashMap<String, org.lince.pulsarbrokerjvm.Core.Entities.Queue> getTopics() {
+    public  ConcurrentHashMap<String, org.lince.pulsarbrokerjvm.Core.Entities.Queue> getTopics() {
         return topics;
     }
 
-    public void setTopics( HashMap<String, org.lince.pulsarbrokerjvm.Core.Entities.Queue> topics) {
+    public void setTopics( ConcurrentHashMap<String, org.lince.pulsarbrokerjvm.Core.Entities.Queue> topics) {
         this.topics = topics;
     }
 
@@ -56,6 +57,25 @@ public class Repository {
         this.repositoryConfig = repositoryConfig;
     }
 
+    public void addQueue(Queue queue) {
+        if (maxQueues()) {
+            this.topics.put(queue.getQueueName(), queue);
+        } else if (repositoryConfig.getMaxQueues() == 0) {
+            this.topics.put(queue.getQueueName(), queue);
+        }
+    }
+
+    public boolean maxQueues() {
+        return topics.size() < repositoryConfig.getMaxQueues();
+    }
+
+    public long getActualSize() {
+        return actualSize;
+    }
+
+    public void setActualSize(long actualSize) {
+        this.actualSize = actualSize;
+    }
 
     @Override
     public String toString() {
