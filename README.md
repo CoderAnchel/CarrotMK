@@ -1,6 +1,5 @@
 # CarrotBK
 ![Group 68 (1).png](Docs/Group%2068%20%281%29.png)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 CarrotBK it's a side project trying to learn more about message and stream brokers, it gives you the ability to create listen and configure queues:
 
