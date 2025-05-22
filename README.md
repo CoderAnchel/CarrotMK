@@ -5,11 +5,5 @@
 CarrotBK it's a side project trying to learn more about message and stream brokers, it gives you the ability to create listen and configure queues:
 
 ![ehbdjkdahbhjbada.svg](Docs/ehbdjkdahbhjbada.svg)
-
-### SDKS
-* [Java](https://github.com/CoderAnchel/CarrotSDK)
-* [Go](https://rabbitmq.com)
-* [Typescript](https://rabbitmq.com)
-
 ### Diagram
 ![project esquema.svg](Docs/project%20esquema.svg)
